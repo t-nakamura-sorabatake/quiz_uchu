@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>挑戦中 | ここも宇宙だよクイズ</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<header class="sky">
+  <div class="inner">
+    <h1 style="font-size:1.1rem">ここも宇宙だよクイズ</h1>
+    <div class="progress-wrap"><div class="progress-bar" id="bar"></div></div>
+    <div class="qmeta" style="padding-bottom:10px">
+      <span id="counter">読み込み中…</span><span id="scoreNow">0点</span>
+    </div>
+  </div>
+  <svg class="skyline" viewBox="0 0 640 56" preserveAspectRatio="none" aria-hidden="true">
+    <rect x="0" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="16" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="32" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="48" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="64" y="36" width="16" height="20" fill="#7ed0dc" opacity="0.45"/><rect x="80" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="96" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="112" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="128" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="144" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="160" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="176" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="192" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="208" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="224" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="240" y="32" width="16" height="24" fill="#7ed0dc" opacity="0.45"/><rect x="256" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="272" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="288" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="304" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="320" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="336" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="352" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="368" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="384" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="400" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="416" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="432" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="448" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="464" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="480" y="32" width="16" height="24" fill="#7ed0dc" opacity="0.45"/><rect x="496" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="512" y="32" width="16" height="24" fill="#7ed0dc" opacity="0.45"/><rect x="528" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="544" y="36" width="16" height="20" fill="#7ed0dc" opacity="0.45"/><rect x="560" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="576" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="592" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="608" y="32" width="16" height="24" fill="#7ed0dc" opacity="0.45"/><rect x="624" y="36" width="16" height="20" fill="#7ed0dc" opacity="0.45"/>
+    <rect x="0" y="32" width="16" height="24" fill="#186275"/><rect x="5" y="38" width="6" height="6" fill="#f6e9a3"/><rect x="16" y="24" width="16" height="32" fill="#186275"/><rect x="32" y="48" width="16" height="8" fill="#186275"/><rect x="48" y="24" width="16" height="32" fill="#186275"/><rect x="64" y="28" width="16" height="28" fill="#186275"/><rect x="80" y="12" width="16" height="44" fill="#186275"/><rect x="96" y="16" width="16" height="40" fill="#186275"/><rect x="112" y="48" width="16" height="8" fill="#186275"/><rect x="128" y="24" width="16" height="32" fill="#186275"/><rect x="144" y="40" width="16" height="16" fill="#186275"/><rect x="160" y="48" width="16" height="8" fill="#186275"/><rect x="176" y="28" width="16" height="28" fill="#186275"/><rect x="192" y="32" width="16" height="24" fill="#186275"/><rect x="208" y="16" width="16" height="40" fill="#186275"/><rect x="224" y="24" width="16" height="32" fill="#186275"/><rect x="240" y="48" width="16" height="8" fill="#186275"/><rect x="256" y="28" width="16" height="28" fill="#186275"/><rect x="261" y="34" width="6" height="6" fill="#f6e9a3"/><rect x="272" y="40" width="16" height="16" fill="#186275"/><rect x="288" y="36" width="16" height="20" fill="#186275"/><rect x="304" y="32" width="16" height="24" fill="#186275"/><rect x="320" y="48" width="16" height="8" fill="#186275"/><rect x="336" y="32" width="16" height="24" fill="#186275"/><rect x="352" y="44" width="16" height="12" fill="#186275"/><rect x="368" y="44" width="16" height="12" fill="#186275"/><rect x="384" y="16" width="16" height="40" fill="#186275"/><rect x="389" y="22" width="6" height="6" fill="#f6e9a3"/><rect x="400" y="32" width="16" height="24" fill="#186275"/><rect x="416" y="24" width="16" height="32" fill="#186275"/><rect x="432" y="12" width="16" height="44" fill="#186275"/><rect x="448" y="12" width="16" height="44" fill="#186275"/><rect x="464" y="48" width="16" height="8" fill="#186275"/><rect x="480" y="48" width="16" height="8" fill="#186275"/><rect x="496" y="28" width="16" height="28" fill="#186275"/><rect x="512" y="16" width="16" height="40" fill="#186275"/><rect x="528" y="16" width="16" height="40" fill="#186275"/><rect x="533" y="22" width="6" height="6" fill="#f6e9a3"/><rect x="544" y="36" width="16" height="20" fill="#186275"/><rect x="560" y="40" width="16" height="16" fill="#186275"/><rect x="576" y="40" width="16" height="16" fill="#186275"/><rect x="592" y="48" width="16" height="8" fill="#186275"/><rect x="608" y="48" width="16" height="8" fill="#186275"/><rect x="624" y="40" width="16" height="16" fill="#186275"/>
+  </svg>
+</header>
+
+<main>
+  <!-- 出題 -->
+  <div class="card" id="qCard">
+    <div>
+      <span class="badge" id="typeBadge"></span>
+      <span class="badge cat" id="catBadge"></span>
+    </div>
+    <p class="qtext" id="qText">問題を読み込んでいます…</p>
+    <div id="choices"></div>
+
+    <!-- 回答後 -->
+    <div id="after" class="hidden">
+      <p class="verdict" id="verdict"></p>
+      <div class="explain" id="explain"></div>
+      <p class="src-line hidden" id="srcLine">
+        <a id="srcLink" href="#" target="_blank" rel="noopener noreferrer">出典・もっと詳しく ↗</a>
+        <span class="small" id="srcDomain"></span>
+      </p>
+      <p class="stat-line" id="statLine"></p>
+
+      <div class="fb-row" id="fbRow">
+        <span class="small">この問題は…</span>
+        <button class="fb-btn" data-rating="5" aria-label="よかった">👍</button>
+        <button class="fb-btn" data-rating="1" aria-label="いまいち">👎</button>
+        <input type="text" id="fbComment" maxlength="200" placeholder="ひとことあれば(任意)">
+      </div>
+      <p class="small hidden" id="fbThanks">フィードバックを送りました。ありがとうございます!</p>
+
+      <button class="btn primary" id="nextBtn" style="margin-top:14px">次の問題へ</button>
+    </div>
+  </div>
+
+  <!-- 結果: 称号 -->
+  <div class="card hidden" id="resultCard">
+    <div class="result-hero">
+      <p class="eyebrow">あなたの称号</p>
+      <div class="icon-wrap" id="rankIcon" aria-hidden="true"></div>
+      <p class="title-badge" id="rankTitle"></p>
+      <p class="title-tag" id="rankTag"></p>
+      <div class="score" id="finalScore"></div>
+      <p id="finalDetail" style="margin:2px 0 0"></p>
+      <span class="rank-chip hidden" id="rankChip"></span>
+    </div>
+    <div class="share-row">
+      <button class="btn" id="shareX">Xで共有</button>
+      <button class="btn" id="shareLine">LINEで共有</button>
+      <button class="btn star full" id="shareNativeBtn">称号をシェアする</button>
+    </div>
+  </div>
+
+  <!-- 結果: カテゴリ別フィードバック -->
+  <div class="card hidden" id="catCard">
+    <p class="eyebrow">分野別のふりかえり</p>
+    <p class="small" id="catSummary" style="margin:0 0 10px"></p>
+    <div id="catRows"></div>
+  </div>
+
+  <div class="navrow hidden" id="resultNav">
+    <button class="btn primary" id="retryBtn">もう一度</button>
+    <a class="btn" href="ranking.html" id="toRanking">ランキング</a>
+    <a class="btn ghost" href="index.html">トップへ</a>
+  </div>
+</main>
+
+<script src="js/common.js"></script>
+<script>
+/* ===== 称号とかわいいアイコン(正答率で7段階) ===== */
+const FACE = (cx, cy) => `
+  <circle cx="${cx-7}" cy="${cy}" r="2.4" fill="#26304f"/>
+  <circle cx="${cx+7}" cy="${cy}" r="2.4" fill="#26304f"/>
+  <path d="M${cx-5},${cy+5} Q${cx},${cy+9} ${cx+5},${cy+5}" fill="none" stroke="#26304f" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="${cx-13}" cy="${cy+5}" r="3.2" fill="#f5a3a3" opacity="0.75"/>
+  <circle cx="${cx+13}" cy="${cy+5}" r="3.2" fill="#f5a3a3" opacity="0.75"/>`;
+
+const ICONS = {
+  legend: `<svg viewBox="0 0 120 120" role="img" aria-label="王冠をかぶった星">
+    <path d="M44,26 L48,10 L56,19 L60,7 L64,19 L72,10 L76,26 Z" fill="#d97f1a"/>
+    <polygon points="60,28 69.4,53.1 96.1,54.3 75.2,70.9 82.3,96.7 60,82 37.7,96.7 44.8,70.9 23.9,54.3 50.6,53.1"
+      fill="#f2b33d" stroke="#d97f1a" stroke-width="3" stroke-linejoin="round"/>
+    ${FACE(60, 64)}</svg>`,
+  satellite: `<svg viewBox="0 0 120 120" role="img" aria-label="人工衛星">
+    <line x1="38" y1="63" x2="82" y2="63" stroke="#38437f" stroke-width="4"/>
+    <rect x="8" y="52" width="26" height="22" rx="3" fill="#3d4b8c" stroke="#26304f" stroke-width="2"/>
+    <rect x="86" y="52" width="26" height="22" rx="3" fill="#3d4b8c" stroke="#26304f" stroke-width="2"/>
+    <line x1="16" y1="52" x2="16" y2="74" stroke="#26304f" stroke-width="1.5"/>
+    <line x1="25" y1="52" x2="25" y2="74" stroke="#26304f" stroke-width="1.5"/>
+    <line x1="94" y1="52" x2="94" y2="74" stroke="#26304f" stroke-width="1.5"/>
+    <line x1="103" y1="52" x2="103" y2="74" stroke="#26304f" stroke-width="1.5"/>
+    <rect x="42" y="46" width="36" height="34" rx="8" fill="#fffdf6" stroke="#26304f" stroke-width="3"/>
+    <line x1="60" y1="46" x2="60" y2="30" stroke="#26304f" stroke-width="3"/>
+    <circle cx="60" cy="26" r="5" fill="#f2b33d" stroke="#d97f1a" stroke-width="2"/>
+    ${FACE(60, 60)}</svg>`,
+  rocket: `<svg viewBox="0 0 120 120" role="img" aria-label="ロケット">
+    <path d="M44,60 L26,82 L44,82 Z" fill="#c9524a"/>
+    <path d="M76,60 L94,82 L76,82 Z" fill="#c9524a"/>
+    <path d="M54,86 Q60,106 66,86 Z" fill="#f2b33d"/>
+    <path d="M60,10 C75,26 77,52 77,84 L43,84 C43,52 45,26 60,10 Z" fill="#fffdf6" stroke="#26304f" stroke-width="3"/>
+    <circle cx="60" cy="38" r="10" fill="#bfe3ef" stroke="#26304f" stroke-width="3"/>
+    ${FACE(60, 62)}</svg>`,
+  moon: `<svg viewBox="0 0 120 120" role="img" aria-label="お月さま">
+    <circle cx="60" cy="60" r="34" fill="#f6d67c" stroke="#d9a92a" stroke-width="3"/>
+    <circle cx="44" cy="46" r="6" fill="#e8bf55"/>
+    <circle cx="76" cy="42" r="4" fill="#e8bf55"/>
+    <circle cx="80" cy="74" r="5" fill="#e8bf55"/>
+    ${FACE(58, 62)}</svg>`,
+  planet: `<svg viewBox="0 0 120 120" role="img" aria-label="輪っかのある惑星">
+    <ellipse cx="60" cy="64" rx="48" ry="13" fill="none" stroke="#f2b33d" stroke-width="5" opacity="0.55"/>
+    <circle cx="60" cy="58" r="28" fill="#9fb8e8" stroke="#26304f" stroke-width="3"/>
+    <ellipse cx="60" cy="64" rx="48" ry="13" fill="none" stroke="#f2b33d" stroke-width="5"
+      stroke-dasharray="76 76" stroke-dashoffset="-38"/>
+    ${FACE(60, 54)}</svg>`,
+  shooting: `<svg viewBox="0 0 120 120" role="img" aria-label="流れ星">
+    <line x1="8" y1="34" x2="42" y2="46" stroke="#f2b33d" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+    <line x1="6" y1="56" x2="38" y2="60" stroke="#f2b33d" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
+    <line x1="10" y1="78" x2="42" y2="72" stroke="#f2b33d" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+    <polygon points="72,26 79,45 99,46 83,58 88,77 72,66 56,77 61,58 45,46 65,45"
+      fill="#f2b33d" stroke="#d97f1a" stroke-width="3" stroke-linejoin="round"/>
+    ${FACE(72, 52)}</svg>`,
+  earth: `<svg viewBox="0 0 120 120" role="img" aria-label="地球">
+    <circle cx="60" cy="60" r="34" fill="#8fc7e8" stroke="#26304f" stroke-width="3"/>
+    <path d="M38,46 Q48,38 56,44 Q60,50 52,54 Q42,56 38,46 Z" fill="#9fd6a3"/>
+    <path d="M70,70 Q82,66 86,74 Q82,84 72,82 Q66,76 70,70 Z" fill="#9fd6a3"/>
+    <path d="M66,34 Q74,32 78,38 Q74,44 66,42 Z" fill="#9fd6a3"/>
+    ${FACE(58, 60)}</svg>`,
+};
+
+const RANKS = [
+  { min: 100, icon: "legend",    title: "伝説の宇宙マスター",       tag: "全問正解!あなたはもう地上に降りた星そのもの" },
+  { min: 90,  icon: "satellite", title: "歩く宇宙アンテナ",         tag: "日常にまぎれた宇宙をほぼ完全キャッチ" },
+  { min: 75,  icon: "rocket",    title: "街の衛星ソムリエ",         tag: "暮らしの中の宇宙をスラスラ語れる実力派" },
+  { min: 60,  icon: "moon",      title: "宇宙とお友達",             tag: "いいセンス!「へー」の収穫がザクザク" },
+  { min: 40,  icon: "planet",    title: "軌道投入トレーニング中",   tag: "のびしろは成層圏を突き抜けて無限大" },
+  { min: 20,  icon: "shooting",  title: "打ち上げカウントダウン中", tag: "点火よし!ここから一気に加速しよう" },
+  { min: 0,   icon: "earth",     title: "地上勤務のホープ",         tag: "大丈夫、宇宙はいつでも頭の上にある" },
+];
+
+(async () => {
+  const N = Math.min(parseInt(new URLSearchParams(location.search).get("n")) || 10, 100);
+  const penName = getPenName();
+  const quiz = await getQuiz();
+
+  const { data: pool, error } = await sb.from("questions")
+    .select("id, question_type, category, question_text, choices, correct_index, explanation, source_url")
+    .eq("quiz_id", quiz.id).eq("status", "approved");
+  if (error || !pool || pool.length === 0) {
+    document.getElementById("qText").textContent = "問題を読み込めませんでした。時間をおいて再度お試しください。";
+    return;
+  }
+  const questions = shuffle(pool).slice(0, Math.min(N, pool.length));
+
+  let idx = 0, correctCount = 0, answered = false, fbSent = false, fbRating = null;
+  const catStats = {};   // カテゴリ別 { c: 正解数, t: 出題数 }
+  const $ = id => document.getElementById(id);
+
+  function renderQuestion() {
+    answered = false; fbSent = false; fbRating = null;
+    const q = questions[idx];
+    $("bar").style.width = (idx / questions.length * 100) + "%";
+    $("counter").textContent = `${idx + 1} / ${questions.length}問目`;
+    $("typeBadge").textContent = q.question_type === "true_false" ? "○×" : "4択";
+    $("catBadge").textContent = q.category;
+    $("qText").textContent = q.question_text;
+    $("after").classList.add("hidden");
+    $("fbThanks").classList.add("hidden");
+    $("fbRow").classList.remove("hidden");
+    $("fbComment").value = "";
+    document.querySelectorAll(".fb-btn").forEach(b => b.classList.remove("sel"));
+
+    const box = $("choices");
+    box.innerHTML = "";
+    q.choices.forEach((c, i) => {
+      const b = document.createElement("button");
+      b.className = "choice" + (q.question_type === "true_false" ? " ox" : "");
+      b.textContent = c;
+      b.addEventListener("click", () => answer(i));
+      box.appendChild(b);
+    });
+  }
+
+  async function answer(i) {
+    if (answered) return;
+    answered = true;
+    const q = questions[idx];
+    const isCorrect = i === q.correct_index;
+    if (isCorrect) correctCount++;
+    const s = catStats[q.category] || (catStats[q.category] = { c: 0, t: 0 });
+    s.t++; if (isCorrect) s.c++;
+
+    document.querySelectorAll(".choice").forEach((b, bi) => {
+      b.disabled = true;
+      if (bi === q.correct_index) b.classList.add("correct");
+      else if (bi === i) b.classList.add("wrong");
+    });
+    $("verdict").textContent = isCorrect ? "正解! ここも宇宙です" : "ざんねん…";
+    $("verdict").className = "verdict " + (isCorrect ? "ok" : "ng");
+    $("explain").textContent = q.explanation || "";
+    if (q.source_url && /^https?:\/\//.test(q.source_url)) {
+      $("srcLink").href = q.source_url;
+      try { $("srcDomain").textContent = "(" + new URL(q.source_url).hostname + ")"; } catch (_) {}
+      $("srcLine").classList.remove("hidden");
+    } else {
+      $("srcLine").classList.add("hidden");
+    }
+    $("scoreNow").textContent = (correctCount * 100) + "点";
+    $("statLine").textContent = "";
+    $("after").classList.remove("hidden");
+
+    // 回答を匿名で記録(正答率の蓄積。個人は特定しない)
+    sb.from("answers").insert({
+      question_id: q.id, selected_index: i, is_correct: isCorrect,
+    }).then(async () => {
+      const { data: st } = await sb.from("question_stats")
+        .select("correct_rate, answer_count").eq("question_id", q.id).single();
+      if (st && st.answer_count > 0) {
+        $("statLine").textContent =
+          `みんなの正答率: ${st.correct_rate}%(のべ${st.answer_count}回答)`;
+      }
+    });
+  }
+
+  document.querySelectorAll(".fb-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      fbRating = parseInt(b.dataset.rating);
+      document.querySelectorAll(".fb-btn").forEach(x => x.classList.toggle("sel", x === b));
+      sendFeedback();
+    });
+  });
+  async function sendFeedback() {
+    if (fbSent || fbRating === null) return;
+    fbSent = true;
+    await sb.from("feedback").insert({
+      question_id: questions[idx].id,
+      rating: fbRating, comment: $("fbComment").value.trim() || null,
+    });
+    $("fbRow").classList.add("hidden");
+    $("fbThanks").classList.remove("hidden");
+  }
+
+  $("nextBtn").addEventListener("click", () => {
+    idx++;
+    if (idx < questions.length) renderQuestion();
+    else finish();
+  });
+
+  /* ---- カテゴリ別ふりかえり ---- */
+  function renderCategoryFeedback() {
+    const rows = Object.entries(catStats)
+      .map(([name, s]) => ({ name, ...s, rate: s.c / s.t }))
+      .sort((a, b) => b.rate - a.rate || b.t - a.t);
+    if (rows.length === 0) return { best: null, growth: null };
+
+    const eligible = rows.filter(r => r.t >= 2);
+    const judged = eligible.length >= 2 ? eligible : rows;
+    const best = judged[0];
+    const growth = judged.length >= 2 ? judged[judged.length - 1] : null;
+
+    $("catRows").innerHTML = rows.map(r => {
+      const pct = Math.round(r.rate * 100);
+      let flag = "";
+      if (best && r.name === best.name && r.rate > 0) flag = '<span class="cat-flag good">★得意</span>';
+      else if (growth && r.name === growth.name && r.rate < 1) flag = '<span class="cat-flag grow">💪のびしろ</span>';
+      return `<div class="cat-row">
+        <span class="cat-name">${esc(r.name)}</span>
+        <span class="cat-bar-wrap"><span class="cat-bar" style="width:${pct}%"></span></span>
+        <span class="cat-score">${r.c}/${r.t}</span>${flag}
+      </div>`;
+    }).join("");
+
+    let summary;
+    if (best && best.rate === 1 && rows.every(r => r.rate === 1)) {
+      summary = "全カテゴリでパーフェクト!どの分野の宇宙も見逃しませんでした。";
+    } else if (best && best.rate > 0) {
+      summary = `「${best.name}」の宇宙にめっぽう強いようです` +
+        (growth && growth.rate < 1 ? `。「${growth.name}」は次の「へー」の狩り場です。` : "。");
+    } else {
+      summary = "これから「へー」を集めていきましょう。全カテゴリが宝の山です。";
+    }
+    $("catSummary").textContent = summary;
+    return { best, growth };
+  }
+
+  async function finish() {
+    const total = questions.length;
+    const score = correctCount * 100;
+    const rate = Math.round(correctCount / total * 100);
+    $("bar").style.width = "100%";
+    $("counter").textContent = "完了!";
+    $("qCard").classList.add("hidden");
+    $("resultCard").classList.remove("hidden");
+    $("catCard").classList.remove("hidden");
+    $("resultNav").classList.remove("hidden");
+
+    const rank = RANKS.find(r => rate >= r.min) || RANKS[RANKS.length - 1];
+    $("rankIcon").innerHTML = ICONS[rank.icon];
+    $("rankTitle").textContent = "【" + rank.title + "】";
+    $("rankTag").textContent = rank.tag;
+    $("finalScore").innerHTML = score + '<small> 点</small>';
+    $("finalDetail").textContent =
+      `${esc(penName)} さん: ${total}問中 ${correctCount}問正解(正答率 ${rate}%)`;
+
+    const { best } = renderCategoryFeedback();
+
+    $("retryBtn").addEventListener("click", () => location.reload());
+    $("toRanking").href = "ranking.html?mode=" + total;
+
+    // スコアボードに記載(ペンネームのみ)→ ペンネームでの順位を取得
+    let myRow = null;
+    const ins = await sb.from("quiz_results").insert({
+      quiz_id: quiz.id, nickname: penName,
+      score, total_questions: total, correct_count: correctCount,
+    });
+    if (!ins.error) {
+      const { data } = await sb.from("ranking_view")
+        .select("rank, score").eq("quiz_id", quiz.id)
+        .eq("total_questions", total).eq("nickname", penName).maybeSingle();
+      myRow = data;
+      if (myRow) {
+        $("rankChip").textContent = `${total}問モード 「${penName}」は現在 ${myRow.rank}位`;
+        $("rankChip").classList.remove("hidden");
+      }
+    }
+
+    // SNS共有(称号+得意分野入り)
+    const url = location.origin + location.pathname.replace(/quiz\.html$/, "");
+    const text = `「ここも宇宙だよクイズ」で称号【${rank.title}】を獲得🚀 ` +
+      `${total}問モード ${score}点(正答率${rate}%)` +
+      (best && best.rate > 0 ? ` / 得意は「${best.name}」` : "") +
+      (myRow ? ` / 現在${myRow.rank}位🌟` : "") +
+      " あなたの毎日にも宇宙が隠れているかも?";
+    $("shareX").addEventListener("click", () => shareToX(text, url));
+    $("shareLine").addEventListener("click", () => shareToLine(text, url));
+    $("shareNativeBtn").addEventListener("click", () => shareNative(text, url));
+  }
+
+  renderQuestion();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理 | ここも宇宙だよクイズ</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<header class="sky">
+  <div class="inner">
+    <p class="eyebrow" style="color:#9aa3cf">ADMIN</p>
+    <h1>管理ページ</h1>
+    <p class="tagline">投稿の承認・却下、正答率とフィードバックの確認。管理者専用です。</p>
+  </div>
+  <svg class="skyline" viewBox="0 0 640 56" preserveAspectRatio="none" aria-hidden="true">
+    <rect x="0" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="16" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="32" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="48" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="64" y="36" width="16" height="20" fill="#7ed0dc" opacity="0.45"/><rect x="80" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="96" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="112" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="128" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="144" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="160" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="176" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="192" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="208" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="224" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="240" y="32" width="16" height="24" fill="#7ed0dc" opacity="0.45"/><rect x="256" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="272" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="288" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="304" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="320" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="336" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="352" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="368" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="384" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="400" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="416" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="432" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="448" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="464" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="480" y="32" width="16" height="24" fill="#7ed0dc" opacity="0.45"/><rect x="496" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="512" y="32" width="16" height="24" fill="#7ed0dc" opacity="0.45"/><rect x="528" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="544" y="36" width="16" height="20" fill="#7ed0dc" opacity="0.45"/><rect x="560" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="576" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="592" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="608" y="32" width="16" height="24" fill="#7ed0dc" opacity="0.45"/><rect x="624" y="36" width="16" height="20" fill="#7ed0dc" opacity="0.45"/>
+    <rect x="0" y="32" width="16" height="24" fill="#186275"/><rect x="5" y="38" width="6" height="6" fill="#f6e9a3"/><rect x="16" y="24" width="16" height="32" fill="#186275"/><rect x="32" y="48" width="16" height="8" fill="#186275"/><rect x="48" y="24" width="16" height="32" fill="#186275"/><rect x="64" y="28" width="16" height="28" fill="#186275"/><rect x="80" y="12" width="16" height="44" fill="#186275"/><rect x="96" y="16" width="16" height="40" fill="#186275"/><rect x="112" y="48" width="16" height="8" fill="#186275"/><rect x="128" y="24" width="16" height="32" fill="#186275"/><rect x="144" y="40" width="16" height="16" fill="#186275"/><rect x="160" y="48" width="16" height="8" fill="#186275"/><rect x="176" y="28" width="16" height="28" fill="#186275"/><rect x="192" y="32" width="16" height="24" fill="#186275"/><rect x="208" y="16" width="16" height="40" fill="#186275"/><rect x="224" y="24" width="16" height="32" fill="#186275"/><rect x="240" y="48" width="16" height="8" fill="#186275"/><rect x="256" y="28" width="16" height="28" fill="#186275"/><rect x="261" y="34" width="6" height="6" fill="#f6e9a3"/><rect x="272" y="40" width="16" height="16" fill="#186275"/><rect x="288" y="36" width="16" height="20" fill="#186275"/><rect x="304" y="32" width="16" height="24" fill="#186275"/><rect x="320" y="48" width="16" height="8" fill="#186275"/><rect x="336" y="32" width="16" height="24" fill="#186275"/><rect x="352" y="44" width="16" height="12" fill="#186275"/><rect x="368" y="44" width="16" height="12" fill="#186275"/><rect x="384" y="16" width="16" height="40" fill="#186275"/><rect x="389" y="22" width="6" height="6" fill="#f6e9a3"/><rect x="400" y="32" width="16" height="24" fill="#186275"/><rect x="416" y="24" width="16" height="32" fill="#186275"/><rect x="432" y="12" width="16" height="44" fill="#186275"/><rect x="448" y="12" width="16" height="44" fill="#186275"/><rect x="464" y="48" width="16" height="8" fill="#186275"/><rect x="480" y="48" width="16" height="8" fill="#186275"/><rect x="496" y="28" width="16" height="28" fill="#186275"/><rect x="512" y="16" width="16" height="40" fill="#186275"/><rect x="528" y="16" width="16" height="40" fill="#186275"/><rect x="533" y="22" width="6" height="6" fill="#f6e9a3"/><rect x="544" y="36" width="16" height="20" fill="#186275"/><rect x="560" y="40" width="16" height="16" fill="#186275"/><rect x="576" y="40" width="16" height="16" fill="#186275"/><rect x="592" y="48" width="16" height="8" fill="#186275"/><rect x="608" y="48" width="16" height="8" fill="#186275"/><rect x="624" y="40" width="16" height="16" fill="#186275"/>
+  </svg>
+</header>
+
+<main>
+  <!-- ログインゲート(管理者のみ。遊ぶ人には一切関係なし) -->
+  <div class="card" id="gate">
+    <p class="small">確認しています…</p>
+  </div>
+
+  <div id="adminArea" class="hidden">
+    <div class="card">
+      <p class="eyebrow">審査待ちの投稿</p>
+      <div id="pendingList"><p class="small">読み込み中…</p></div>
+    </div>
+
+    <div class="card">
+      <p class="eyebrow">正答率ワースト/ベスト(回答10件以上)</p>
+      <div id="statsList"><p class="small">読み込み中…</p></div>
+    </div>
+
+    <div class="card">
+      <p class="eyebrow">最近のフィードバック</p>
+      <div id="fbList"><p class="small">読み込み中…</p></div>
+    </div>
+
+    <button class="btn ghost" id="logoutBtn">ログアウト</button>
+  </div>
+
+  <div class="navrow">
+    <a class="btn" href="index.html">トップへ</a>
+  </div>
+</main>
+
+<script src="js/common.js"></script>
+<script>
+(async () => {
+  const $ = id => document.getElementById(id);
+
+  /* ---- 管理者ログイン(Magic Link) ---- */
+  const { data: { session } } = await sb.auth.getSession();
+
+  if (!session) {
+    $("gate").innerHTML = `
+      <p style="margin:0 0 6px"><strong>管理者ログイン</strong></p>
+      <p class="small" style="margin:0 0 8px">このページはクイズの承認を行う管理者専用です。遊ぶだけならログインは不要です。</p>
+      <label for="adminEmail">管理者のメールアドレス</label>
+      <input type="email" id="adminEmail" placeholder="you@example.com">
+      <button class="btn primary" id="sendLink" style="margin-top:10px">ログインリンクをメールで受け取る</button>
+      <p class="small hidden" id="sentMsg" style="margin-top:8px">メールを送信しました。届いたリンクをこの端末で開いてください。</p>`;
+    $("sendLink").addEventListener("click", async () => {
+      const email = $("adminEmail").value.trim();
+      if (!email) { alert("メールアドレスを入力してください。"); return; }
+      $("sendLink").disabled = true;
+      const { error } = await sb.auth.signInWithOtp({
+        email, options: { emailRedirectTo: location.href },
+      });
+      $("sendLink").disabled = false;
+      if (error) { alert("送信に失敗しました: " + error.message); return; }
+      $("sentMsg").classList.remove("hidden");
+    });
+    return;
+  }
+
+  /* ---- 管理者権限の確認 ---- */
+  const { data: profile } = await sb.from("profiles")
+    .select("id, is_admin").eq("id", session.user.id).maybeSingle();
+
+  if (!profile || !profile.is_admin) {
+    $("gate").innerHTML = `
+      <p style="margin:0 0 6px"><strong>ログインしましたが、まだ管理者ではありません。</strong></p>
+      <p class="small" style="margin:0 0 8px">SupabaseのSQL Editorで以下を実行すると、このアカウントが管理者になります:</p>
+      <div class="explain" style="word-break:break-all"><code>update public.profiles set is_admin = true where id = '${session.user.id}';</code></div>
+      <p class="small" style="margin:8px 0 0">実行後、このページを再読み込みしてください。</p>
+      <button class="btn ghost" id="logoutBtn2" style="margin-top:10px">ログアウト</button>`;
+    $("logoutBtn2").addEventListener("click", async () => { await sb.auth.signOut(); location.reload(); });
+    return;
+  }
+
+  $("gate").classList.add("hidden");
+  $("adminArea").classList.remove("hidden");
+  $("logoutBtn").addEventListener("click", async () => { await sb.auth.signOut(); location.reload(); });
+
+  /* ---- 審査待ち ---- */
+  async function loadPending() {
+    const { data: rows } = await sb.from("questions")
+      .select("id, question_type, category, question_text, choices, correct_index, explanation, source_url, submitted_name, created_at")
+      .eq("status", "pending").order("created_at");
+    const box = $("pendingList");
+    if (!rows || rows.length === 0) { box.innerHTML = '<p class="small">審査待ちはありません。</p>'; return; }
+    box.innerHTML = "";
+    rows.forEach(q => {
+      const div = document.createElement("div");
+      div.className = "pending-item";
+      const choicesHtml = q.choices.map((c, i) =>
+        `<span class="${i === q.correct_index ? "" : "small"}">${i === q.correct_index ? "◎ " : "・"}${esc(c)}</span>`
+      ).join("<br>");
+      div.innerHTML = `
+        <p style="margin:0"><span class="badge">${q.question_type === "true_false" ? "○×" : "4択"}</span>
+        <span class="badge cat">${esc(q.category)}</span>
+        ${q.submitted_name ? '<span class="small">投稿: ' + esc(q.submitted_name) + '</span>' : ""}</p>
+        <p style="margin:6px 0"><strong>${esc(q.question_text)}</strong></p>
+        <p style="margin:6px 0">${choicesHtml}</p>
+        <p class="small" style="margin:6px 0">解説: ${esc(q.explanation || "(なし)")}</p>
+        <p class="small" style="margin:6px 0">出典: ${
+          q.source_url && /^https?:\/\//.test(q.source_url)
+            ? `<a href="${esc(q.source_url)}" target="_blank" rel="noopener noreferrer">${esc(q.source_url)}</a>`
+            : "(なし)"
+        }</p>
+        <div class="admin-actions">
+          <button class="btn primary ap">承認する</button>
+          <button class="btn rj">却下する</button>
+        </div>`;
+      div.querySelector(".ap").addEventListener("click", async () => {
+        const { error } = await sb.from("questions").update({ status: "approved" }).eq("id", q.id);
+        if (error) alert("更新に失敗しました: " + error.message);
+        loadPending();
+      });
+      div.querySelector(".rj").addEventListener("click", async () => {
+        const reason = prompt("却下の理由(投稿者に表示されます)", "内容を確認できませんでした");
+        if (reason === null) return;
+        const { error } = await sb.from("questions").update({ status: "rejected", reject_reason: reason }).eq("id", q.id);
+        if (error) alert("更新に失敗しました: " + error.message);
+        loadPending();
+      });
+      box.appendChild(div);
+    });
+  }
+
+  /* ---- 正答率 ---- */
+  async function loadStats() {
+    const { data: rows } = await sb.from("question_stats")
+      .select("question_text, category, answer_count, correct_rate")
+      .gte("answer_count", 10).order("correct_rate", { ascending: true }).limit(200);
+    const box = $("statsList");
+    if (!rows || rows.length === 0) { box.innerHTML = '<p class="small">回答10件以上の問題がまだありません。</p>'; return; }
+    const worst = rows.slice(0, 5);
+    const best = rows.slice(-5).reverse();
+    const line = r => `<div class="pending-item"><p style="margin:0">${esc(r.question_text)}</p>
+      <p class="small" style="margin:2px 0 0">${esc(r.category)} / 正答率 ${r.correct_rate}%(${r.answer_count}回答)</p></div>`;
+    box.innerHTML = "<p class='small' style='margin:0'><strong>むずかしい問題 TOP5</strong></p>" + worst.map(line).join("") +
+      "<p class='small' style='margin:14px 0 0'><strong>やさしい問題 TOP5</strong></p>" + best.map(line).join("");
+  }
+
+  /* ---- フィードバック ---- */
+  async function loadFeedback() {
+    const { data: rows } = await sb.from("feedback")
+      .select("rating, comment, created_at, questions(question_text)")
+      .order("created_at", { ascending: false }).limit(30);
+    const box = $("fbList");
+    if (!rows || rows.length === 0) { box.innerHTML = '<p class="small">フィードバックはまだありません。</p>'; return; }
+    box.innerHTML = rows.map(r =>
+      `<div class="pending-item">
+        <p style="margin:0">${r.rating >= 4 ? "👍" : "👎"} ${esc(r.comment || "(コメントなし)")}</p>
+        <p class="small" style="margin:2px 0 0">問題: ${esc(r.questions ? r.questions.question_text : "(削除済み)")}</p>
+      </div>`).join("");
+  }
+
+  loadPending(); loadStats(); loadFeedback();
+})();
+</script>
+</body>
+</html>

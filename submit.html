@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>クイズを投稿 | ここも宇宙だよクイズ</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<header class="sky">
+  <div class="inner">
+    <p class="eyebrow" style="color:#9aa3cf">SUBMIT</p>
+    <h1>クイズを投稿する</h1>
+    <p class="tagline">あなたが見つけた「ここも宇宙だよ」を教えてください。承認されると出題に加わります。ログインは不要です。</p>
+  </div>
+  <svg class="skyline" viewBox="0 0 640 56" preserveAspectRatio="none" aria-hidden="true">
+    <rect x="0" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="16" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="32" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="48" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="64" y="36" width="16" height="20" fill="#7ed0dc" opacity="0.45"/><rect x="80" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="96" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="112" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="128" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="144" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="160" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="176" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="192" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="208" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="224" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="240" y="32" width="16" height="24" fill="#7ed0dc" opacity="0.45"/><rect x="256" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="272" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="288" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="304" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="320" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="336" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="352" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="368" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="384" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="400" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="416" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="432" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="448" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="464" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="480" y="32" width="16" height="24" fill="#7ed0dc" opacity="0.45"/><rect x="496" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="512" y="32" width="16" height="24" fill="#7ed0dc" opacity="0.45"/><rect x="528" y="28" width="16" height="28" fill="#7ed0dc" opacity="0.45"/><rect x="544" y="36" width="16" height="20" fill="#7ed0dc" opacity="0.45"/><rect x="560" y="44" width="16" height="12" fill="#7ed0dc" opacity="0.45"/><rect x="576" y="40" width="16" height="16" fill="#7ed0dc" opacity="0.45"/><rect x="592" y="24" width="16" height="32" fill="#7ed0dc" opacity="0.45"/><rect x="608" y="32" width="16" height="24" fill="#7ed0dc" opacity="0.45"/><rect x="624" y="36" width="16" height="20" fill="#7ed0dc" opacity="0.45"/>
+    <rect x="0" y="32" width="16" height="24" fill="#186275"/><rect x="5" y="38" width="6" height="6" fill="#f6e9a3"/><rect x="16" y="24" width="16" height="32" fill="#186275"/><rect x="32" y="48" width="16" height="8" fill="#186275"/><rect x="48" y="24" width="16" height="32" fill="#186275"/><rect x="64" y="28" width="16" height="28" fill="#186275"/><rect x="80" y="12" width="16" height="44" fill="#186275"/><rect x="96" y="16" width="16" height="40" fill="#186275"/><rect x="112" y="48" width="16" height="8" fill="#186275"/><rect x="128" y="24" width="16" height="32" fill="#186275"/><rect x="144" y="40" width="16" height="16" fill="#186275"/><rect x="160" y="48" width="16" height="8" fill="#186275"/><rect x="176" y="28" width="16" height="28" fill="#186275"/><rect x="192" y="32" width="16" height="24" fill="#186275"/><rect x="208" y="16" width="16" height="40" fill="#186275"/><rect x="224" y="24" width="16" height="32" fill="#186275"/><rect x="240" y="48" width="16" height="8" fill="#186275"/><rect x="256" y="28" width="16" height="28" fill="#186275"/><rect x="261" y="34" width="6" height="6" fill="#f6e9a3"/><rect x="272" y="40" width="16" height="16" fill="#186275"/><rect x="288" y="36" width="16" height="20" fill="#186275"/><rect x="304" y="32" width="16" height="24" fill="#186275"/><rect x="320" y="48" width="16" height="8" fill="#186275"/><rect x="336" y="32" width="16" height="24" fill="#186275"/><rect x="352" y="44" width="16" height="12" fill="#186275"/><rect x="368" y="44" width="16" height="12" fill="#186275"/><rect x="384" y="16" width="16" height="40" fill="#186275"/><rect x="389" y="22" width="6" height="6" fill="#f6e9a3"/><rect x="400" y="32" width="16" height="24" fill="#186275"/><rect x="416" y="24" width="16" height="32" fill="#186275"/><rect x="432" y="12" width="16" height="44" fill="#186275"/><rect x="448" y="12" width="16" height="44" fill="#186275"/><rect x="464" y="48" width="16" height="8" fill="#186275"/><rect x="480" y="48" width="16" height="8" fill="#186275"/><rect x="496" y="28" width="16" height="28" fill="#186275"/><rect x="512" y="16" width="16" height="40" fill="#186275"/><rect x="528" y="16" width="16" height="40" fill="#186275"/><rect x="533" y="22" width="6" height="6" fill="#f6e9a3"/><rect x="544" y="36" width="16" height="20" fill="#186275"/><rect x="560" y="40" width="16" height="16" fill="#186275"/><rect x="576" y="40" width="16" height="16" fill="#186275"/><rect x="592" y="48" width="16" height="8" fill="#186275"/><rect x="608" y="48" width="16" height="8" fill="#186275"/><rect x="624" y="40" width="16" height="16" fill="#186275"/>
+  </svg>
+</header>
+
+<main>
+  <div class="card">
+    <label>形式</label>
+    <div class="tabs" role="tablist" style="margin-bottom:4px">
+      <button class="tab active" id="tabOX" type="button">○×クイズ</button>
+      <button class="tab" id="tabMC" type="button">4択クイズ</button>
+    </div>
+
+    <label for="cat">カテゴリ</label>
+    <select id="cat">
+      <option>交通・移動</option><option>通信・放送</option>
+      <option>食・農業</option><option>健康・医療</option>
+      <option>くらしの道具</option><option>防災・安全</option>
+      <option>お金・仕事</option><option>スポーツ・娯楽</option>
+    </select>
+
+    <label for="qtext">問題文</label>
+    <textarea id="qtext" rows="3" maxlength="300" placeholder="例)スマホの地図で現在地がわかるのは、宇宙の衛星のおかげである。○か×か?"></textarea>
+
+    <!-- ○× -->
+    <div id="oxArea">
+      <label>正解</label>
+      <div class="modes">
+        <button class="btn mode-btn primary" type="button" id="ansO" data-i="0"><span class="n">○</span></button>
+        <button class="btn mode-btn" type="button" id="ansX" data-i="1"><span class="n">×</span></button>
+      </div>
+    </div>
+
+    <!-- 4択 -->
+    <div id="mcArea" class="hidden">
+      <label>選択肢(正解のものにチェック)</label>
+      <div id="mcChoices"></div>
+    </div>
+
+    <label for="explain">解説(「へー!」となる一言を)</label>
+    <textarea id="explain" rows="3" maxlength="300" placeholder="正解の背景や豆知識"></textarea>
+
+    <label for="srcUrl">出典URL(任意・あると承認されやすい)</label>
+    <input type="url" id="srcUrl" maxlength="300" placeholder="https:// で始まる、根拠となるページのURL">
+
+    <label for="penName">投稿者ペンネーム(任意)</label>
+    <input type="text" id="penName" maxlength="20" placeholder="採用時のクレジット用(空欄OK)">
+
+    <button class="btn star" id="sendBtn" style="margin-top:14px">この内容で投稿する</button>
+    <p class="small hidden" id="doneMsg" style="margin-top:8px">投稿を受け付けました!管理者の承認後、みんなへの出題に加わります。</p>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">この端末からの投稿</p>
+    <p class="small" style="margin:0 0 8px">投稿の記録はこの端末の中にだけ保存されます(サーバーには誰の投稿かを記録しません)。</p>
+    <div id="myList"><p class="small">読み込み中…</p></div>
+  </div>
+
+  <div class="navrow">
+    <a class="btn" href="index.html">トップへ</a>
+    <a class="btn" href="ranking.html">ランキング</a>
+  </div>
+</main>
+
+<script src="js/common.js"></script>
+<script>
+(async () => {
+  const quiz = await getQuiz();
+  const $ = id => document.getElementById(id);
+  $("penName").value = getPenName() === "名無しの宇宙人" ? "" : getPenName();
+
+  /* 形式切替 */
+  let qtype = "true_false";
+  let oxAnswer = 0;
+  $("tabOX").addEventListener("click", () => setType("true_false"));
+  $("tabMC").addEventListener("click", () => setType("multiple_choice"));
+  function setType(t) {
+    qtype = t;
+    $("tabOX").classList.toggle("active", t === "true_false");
+    $("tabMC").classList.toggle("active", t === "multiple_choice");
+    $("oxArea").classList.toggle("hidden", t !== "true_false");
+    $("mcArea").classList.toggle("hidden", t !== "multiple_choice");
+  }
+  $("ansO").addEventListener("click", () => setOX(0));
+  $("ansX").addEventListener("click", () => setOX(1));
+  function setOX(i) {
+    oxAnswer = i;
+    $("ansO").classList.toggle("primary", i === 0);
+    $("ansX").classList.toggle("primary", i === 1);
+  }
+
+  /* 4択入力欄 */
+  const mcBox = $("mcChoices");
+  for (let i = 0; i < 4; i++) {
+    const row = document.createElement("div");
+    row.className = "fb-row";
+    row.innerHTML = `
+      <input type="radio" name="mcCorrect" value="${i}" ${i === 0 ? "checked" : ""} aria-label="選択肢${i + 1}を正解にする">
+      <input type="text" class="mc-in" maxlength="60" placeholder="選択肢${i + 1}">`;
+    mcBox.appendChild(row);
+  }
+
+  /* 投稿 */
+  $("sendBtn").addEventListener("click", async () => {
+    const qtext = $("qtext").value.trim();
+    const explain = $("explain").value.trim();
+    const srcUrl = $("srcUrl").value.trim();
+    const pen = $("penName").value.trim();
+    if (!qtext) { alert("問題文を入力してください。"); return; }
+    if (!explain) { alert("解説を入力してください。「へー!」が主役のクイズです。"); return; }
+    if (srcUrl && !/^https?:\/\/.+/.test(srcUrl)) {
+      alert("出典URLは https:// で始まる形式で入力してください(空欄でもOKです)。"); return;
+    }
+
+    let choices, correct;
+    if (qtype === "true_false") {
+      choices = ["○", "×"]; correct = oxAnswer;
+    } else {
+      choices = [...document.querySelectorAll(".mc-in")].map(x => x.value.trim());
+      if (choices.some(c => !c)) { alert("選択肢を4つすべて入力してください。"); return; }
+      correct = parseInt(document.querySelector('input[name="mcCorrect"]:checked').value);
+    }
+
+    $("sendBtn").disabled = true;
+    const { data, error } = await sb.from("questions").insert({
+      quiz_id: quiz.id, question_type: qtype, category: $("cat").value,
+      question_text: qtext, choices, correct_index: correct,
+      explanation: explain, source_url: srcUrl || null,
+      submitted_name: pen || null, status: "pending",
+    }).select("id").single();
+    $("sendBtn").disabled = false;
+    if (error) { alert("投稿に失敗しました。時間をおいてお試しください。"); return; }
+    addMySubmissionId(data.id);
+    $("doneMsg").classList.remove("hidden");
+    $("qtext").value = ""; $("explain").value = ""; $("srcUrl").value = "";
+    document.querySelectorAll(".mc-in").forEach(x => x.value = "");
+    loadMine();
+  });
+
+  /* この端末からの投稿一覧(IDは端末内にだけ保存) */
+  async function loadMine() {
+    const ids = getMySubmissionIds();
+    const box = $("myList");
+    if (ids.length === 0) { box.innerHTML = '<p class="small">まだ投稿はありません。</p>'; return; }
+    const { data: rows } = await sb.from("questions")
+      .select("id, question_text, status, reject_reason, created_at")
+      .in("id", ids);
+    if (!rows || rows.length === 0) { box.innerHTML = '<p class="small">まだ投稿はありません。</p>'; return; }
+    rows.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
+    const label = { pending: "審査中", approved: "採用!", rejected: "見送り" };
+    box.innerHTML = rows.map(r =>
+      `<div class="pending-item">
+        <p style="margin:0 0 4px">${esc(r.question_text)}</p>
+        <p class="small" style="margin:0">状態: ${label[r.status] || r.status}${r.status === "rejected" && r.reject_reason ? " — " + esc(r.reject_reason) : ""}</p>
+      </div>`).join("");
+  }
+  loadMine();
+})();
+</script>
+</body>
+</html>
