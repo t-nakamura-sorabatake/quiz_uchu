@@ -2,7 +2,7 @@
 
 /* ▼▼▼ ここを自分のSupabaseプロジェクトの値に書き換えてください ▼▼▼ */
 const SUPABASE_URL = "https://hdzrfvhvuiafprklueto.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkenJmdmh2dWlhZnBya2x1ZXRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzODE1MDgsImV4cCI6MjA5OTk1NzUwOH0.nN9cXajvDRDRJtBi_SyXjcbdG082QDytoSKUrkwgn-4";
+const SUPABASE_ANON_KEY = "sb_publishable_5ShTOwakYcG6RUUnIScdew_gIOjuGve";
 /* ▲▲▲ Settings → API で確認できます(anon public キーはRLS前提で公開可)▲▲▲ */
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
