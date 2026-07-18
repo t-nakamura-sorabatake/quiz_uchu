@@ -1,8 +1,8 @@
 /* ここも宇宙だよクイズ — 共通処理(ログインレス版) */
 
 /* ▼▼▼ ここを自分のSupabaseプロジェクトの値に書き換えてください ▼▼▼ */
-const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
-const SUPABASE_ANON_KEY = "YOUR_ANON_PUBLIC_KEY";
+const SUPABASE_URL = "https://hdzrfvhvuiafprklueto.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_5ShTOwakYcG6RUUnIScdew_gIOjuGve";
 /* ▲▲▲ Settings → API で確認できます(anon public キーはRLS前提で公開可)▲▲▲ */
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
