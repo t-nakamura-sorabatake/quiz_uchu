@@ -1,236 +1,96 @@
-/* ここも宇宙だよクイズ — 宙(こん)と畑(みどり)のあいだ */
-:root {
-  --sky: #2e93a6;          /* 宙畑ティール(濃) */          /* 宙: 深い紺 */
-  --sky-deep: #55bccb;     /* 宙畑ティール(明) */
-  --field: #2e93a6;        /* メインアクセント=ティール */
-  --field-deep: #1e7385;   /* 読めるティール(テキスト・線) */
-  --field-back: #7ed0dc;   /* 明るいティール */
-  --field-pale: #e3f2f5;   /* 淡いティールの面 */
-  --star: #ed8438;         /* 宙畑オレンジ(差し色) */
-  --lemon: #f6e9a3;        /* 淡いイエロー(タイル窓あかり) */
-  --paper: #fdfefe;
-  --card: #ffffff;
-  --ink: #1e2a44;
-  --muted: #6e7686;
-  --ok: #1e7385;
-  --ng: #d9564c;
-  --line: #dfe8ea;
-  --radius: 16px;
+/* ここも宇宙だよクイズ — 共通処理(ログインレス版) */
+
+/* ▼▼▼ ここを自分のSupabaseプロジェクトの値に書き換えてください ▼▼▼ */
+const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR_ANON_PUBLIC_KEY";
+/* ▲▲▲ Settings → API で確認できます(anon public キーはRLS前提で公開可)▲▲▲ */
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* ---- ペンネーム(この端末のlocalStorageにだけ保存。サーバーには送らない) ---- */
+const PEN_KEY = "uchu_quiz_penname";
+const DEFAULT_PEN = "名無しの宇宙人";
+
+function getPenName() {
+  try { return (localStorage.getItem(PEN_KEY) || "").trim() || DEFAULT_PEN; }
+  catch (_) { return DEFAULT_PEN; }
+}
+function savePenName(name) {
+  const n = (name || "").trim().slice(0, 20) || DEFAULT_PEN;
+  try { localStorage.setItem(PEN_KEY, n); } catch (_) {}
+  return n;
 }
 
-* { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
-body {
-  margin: 0;
-  background-color: var(--paper);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Crect x='14' y='18' width='30' height='30' fill='none' stroke='%23f2e5a0' stroke-width='2'/%3E%3Crect x='104' y='96' width='18' height='18' fill='none' stroke='%23f2e5a0' stroke-width='2'/%3E%3Crect x='64' y='128' width='10' height='10' fill='none' stroke='%23eaf4f6' stroke-width='2'/%3E%3C/svg%3E");
-  color: var(--ink);
-  font-family: "Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
-  line-height: 1.7;
+/* ---- 自分の投稿ID(端末側でだけ記録) ---- */
+const SUB_KEY = "uchu_quiz_my_submissions";
+function getMySubmissionIds() {
+  try { return JSON.parse(localStorage.getItem(SUB_KEY) || "[]"); }
+  catch (_) { return []; }
 }
-h1, h2, h3, .display { font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif; }
-
-/* ---- 夜空ヘッダー + 畑の丘(全ページ共通のシグネチャー)---- */
-.sky {
-  position: relative;
-  background: linear-gradient(180deg, var(--sky-deep) 0%, var(--sky) 88%);
-  color: #ffffff;
-  padding: 22px 20px 0;
-  overflow: hidden;
-}
-.sky .inner { max-width: 640px; margin: 0 auto; position: relative; z-index: 2; }
-.sky h1 { margin: 4px 0 2px; font-size: 1.45rem; letter-spacing: .04em; }
-.sky .tagline { margin: 0 0 14px; font-size: .82rem; color: #eaf7fa; }
-.sky a { color: #fdf0c8; text-decoration: none; }
-.sky .eyebrow { color: #d6f0f4; }
-.star-dot {
-  position: absolute; width: 9px; height: 9px; border-radius: 1.5px;
-  background: rgba(255, 255, 255, .34);
-  animation: twinkle 3.6s ease-in-out infinite;
-}
-.star-dot.big { width: 14px; height: 14px; background: rgba(126, 208, 220, .5); }
-.star-dot.lemon { background: rgba(246, 233, 163, .75); }
-.star-dot.spark {
-  width: 14px; height: 14px; background: none; border-radius: 0;
-}
-.star-dot.spark::before, .star-dot.spark::after {
-  content: ""; position: absolute; background: #fff; border-radius: 2px;
-}
-.star-dot.spark::before { left: 5.5px; top: 0; width: 3px; height: 14px; }
-.star-dot.spark::after { left: 0; top: 5.5px; width: 14px; height: 3px; }
-@keyframes twinkle { 0%,100% { opacity: .2; } 50% { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) {
-  .star-dot { animation: none; }
-}
-/* 畑の丘 = 宙と畑の境界線 */
-.skyline { display: block; width: 100%; height: 54px; position: relative; z-index: 1; margin-top: 10px; }
-
-/* ---- 本文 ---- */
-main { max-width: 640px; margin: 0 auto; padding: 18px 16px 56px; }
-.card {
-  background: var(--card); border: 1.5px solid var(--line);
-  border-radius: var(--radius); padding: 18px; margin-bottom: 16px;
-  box-shadow: 0 2px 0 rgba(30, 42, 68, .04);
-}
-.eyebrow {
-  font-size: .74rem; font-weight: 700; letter-spacing: .12em;
-  color: var(--field-deep); margin-bottom: 4px;
-}
-.eyebrow::before {
-  content: ""; display: inline-block; width: 8px; height: 8px;
-  border-radius: 2px; background: var(--field); margin-right: 7px;
-  transform: rotate(45deg); vertical-align: 1px;
-}
-.sky .eyebrow::before { background: var(--lemon); }
-
-.btn {
-  display: inline-block; width: 100%; padding: 14px 16px; margin: 6px 0;
-  font-size: 1.02rem; font-family: inherit; font-weight: 700;
-  border: 2px solid var(--field-deep); border-radius: 14px;
-  background: #fff; color: var(--field-deep); cursor: pointer; text-align: center;
-  text-decoration: none;
-  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
-}
-.btn:hover { transform: translateY(-2px); box-shadow: 0 4px 0 rgba(30, 42, 68, .12); }
-.btn:active { transform: translateY(0) scale(.98); box-shadow: none; }
-.btn.primary { background: var(--field-deep); color: #ffffff; }
-.btn.star { background: var(--star); border-color: #d06f28; color: #ffffff; }
-.btn.field { background: var(--field); border-color: var(--field-deep); color: #fff; }
-.btn.ghost { border-color: var(--line); color: var(--muted); font-weight: 500; }
-.btn:disabled { opacity: .45; cursor: default; transform: none; box-shadow: none; }
-.btn:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
-  outline: 3px solid var(--field); outline-offset: 2px;
+function addMySubmissionId(id) {
+  const ids = getMySubmissionIds();
+  ids.unshift(id);
+  try { localStorage.setItem(SUB_KEY, JSON.stringify(ids.slice(0, 50))); } catch (_) {}
 }
 
-/* モード選択(10/30/50/100) */
-.modes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.mode-btn { position: relative; padding: 18px 10px; }
-.mode-btn:hover { border-color: var(--field-deep); }
-.mode-btn .n { display: block; font-size: 1.9rem; line-height: 1.1; font-family: "Zen Maru Gothic", sans-serif; }
-.mode-btn .u { font-size: .78rem; color: var(--muted); }
-.mode-btn.primary .u { color: #cdeef3; }
-.mode-btn.primary:hover { border-color: var(--lemon); }
+/* ---- クイズ本体(最初の公開クイズ)を取得 ---- */
+async function getQuiz() {
+  const { data, error } = await sb.from("quizzes")
+    .select("id, title, description").eq("is_published", true)
+    .order("created_at").limit(1).single();
+  if (error || !data) { alert("クイズの読み込みに失敗しました。"); throw error; }
+  return data;
+}
 
-/* クイズ画面 */
-.progress-wrap { height: 9px; background: rgba(255,255,255,.3); border-radius: 99px; margin: 10px 0 4px; }
-.progress-bar {
-  height: 9px; border-radius: 99px; width: 0;
-  background: linear-gradient(90deg, var(--lemon) 0%, #f2d96b 100%);
-  transition: width .3s ease;
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+  ));
 }
-.qmeta { display: flex; justify-content: space-between; font-size: .8rem; color: #eaf7fa; }
-.badge {
-  display: inline-block; font-size: .72rem; font-weight: 700;
-  padding: 3px 12px; border-radius: 99px; background: var(--field-deep); color: #ffffff; margin-right: 6px;
-}
-.badge.cat {
-  background: var(--field-pale); color: var(--field-deep);
-  border: 1.5px solid var(--field);
-}
-.qtext { font-size: 1.12rem; font-weight: 700; margin: 12px 0 16px; }
-.choice {
-  display: block; width: 100%; text-align: left; padding: 14px 16px; margin: 8px 0;
-  font-size: 1rem; font-family: inherit; background: #fff; color: var(--ink);
-  border: 2px solid var(--line); border-radius: 14px; cursor: pointer;
-  transition: transform .1s ease, border-color .1s ease, background .1s ease;
-}
-.choice:not(:disabled):hover { border-color: var(--field); background: var(--field-pale); transform: translateY(-1px); }
-.choice.ox { text-align: center; font-size: 1.5rem; font-weight: 700; }
-.choice.correct { border-color: var(--ok); background: var(--field-pale); }
-.choice.wrong { border-color: var(--ng); background: #fbeeed; }
-.choice:disabled { cursor: default; }
-.verdict { font-size: 1.3rem; font-weight: 700; margin: 12px 0 4px; font-family: "Zen Maru Gothic", sans-serif; }
-.verdict.ok { color: var(--ok); }
-.verdict.ng { color: var(--ng); }
-.explain {
-  background: var(--field-pale); border-left: 4px solid var(--field);
-  border-radius: 10px; padding: 12px 14px; font-size: .95rem;
-}
-.stat-line { font-size: .82rem; color: var(--muted); margin-top: 8px; }
-.src-line { font-size: .86rem; margin: 8px 0 0; }
-.src-line a {
-  color: var(--field-deep); font-weight: 700; text-decoration: none;
-  border-bottom: 2px solid var(--field); padding-bottom: 1px;
-}
-.src-line a:hover { background: var(--field-pale); }
 
-/* フィードバック */
-.fb-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
-.fb-btn {
-  font-size: 1.2rem; padding: 8px 16px; border-radius: 99px;
-  border: 1.5px solid var(--line); background: #fff; cursor: pointer;
-  transition: transform .1s ease, border-color .1s ease;
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
 }
-.fb-btn:hover { transform: scale(1.12); border-color: var(--field); }
-.fb-btn.sel { border-color: var(--field-deep); background: var(--field-pale); }
-.fb-row input { flex: 1 1 160px; min-width: 0; }
 
-input[type=text], input[type=url], input[type=email], textarea, select {
-  width: 100%; padding: 11px 12px; font-size: 1rem; font-family: inherit;
-  border: 1.5px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink);
+/* ---- 夜空ヘッダーに星を散らす(装飾) ---- */
+function scatterStars() {
+  const sky = document.querySelector(".sky");
+  if (!sky) return;
+  for (let i = 0; i < 22; i++) {
+    const s = document.createElement("span");
+    const r = Math.random();
+    s.className = "star-dot" +
+      (r < 0.14 ? " spark" : r < 0.32 ? " big" : r < 0.48 ? " lemon" : "");
+    s.style.left = Math.random() * 100 + "%";
+    s.style.top = Math.random() * 62 + "%";
+    s.style.animationDelay = (Math.random() * 3.4).toFixed(2) + "s";
+    s.setAttribute("aria-hidden", "true");
+    sky.appendChild(s);
+  }
 }
-label { font-size: .85rem; font-weight: 700; display: block; margin: 12px 0 4px; }
+document.addEventListener("DOMContentLoaded", scatterStars);
 
-/* 結果画面 */
-.result-hero { text-align: center; padding: 8px 0 4px; }
-.icon-wrap { margin: 4px auto 0; }
-.icon-wrap svg { width: 118px; height: 118px; }
-@media (prefers-reduced-motion: no-preference) {
-  .icon-wrap svg { animation: pop .45s cubic-bezier(.34,1.56,.64,1); }
-  @keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+/* ---- SNS共有 ---- */
+function shareToX(text, url) {
+  window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(text) +
+    "&url=" + encodeURIComponent(url), "_blank");
 }
-.title-badge {
-  font-family: "Zen Maru Gothic", sans-serif; font-size: 1.5rem;
-  color: var(--field-deep); margin: 2px 0 0; line-height: 1.3;
+function shareToLine(text, url) {
+  window.open("https://social-plugins.line.me/lineit/share?url=" + encodeURIComponent(url) +
+    "&text=" + encodeURIComponent(text), "_blank");
 }
-.title-tag { font-size: .88rem; color: var(--muted); margin: 4px 0 8px; }
-.result-hero .score { font-size: 2.6rem; font-family: "Zen Maru Gothic", sans-serif; color: var(--field-deep); line-height: 1.1; }
-.result-hero .score small { font-size: 1.1rem; }
-.rank-chip {
-  display: inline-block; background: var(--field-deep); color: var(--lemon);
-  border-radius: 99px; padding: 5px 18px; font-weight: 700; margin-top: 8px;
+async function shareNative(text, url) {
+  if (navigator.share) {
+    try { await navigator.share({ text, url }); } catch (_) { /* キャンセルは無視 */ }
+  } else {
+    try {
+      await navigator.clipboard.writeText(text + " " + url);
+      alert("共有テキストをコピーしました!");
+    } catch (_) { alert(text + " " + url); }
+  }
 }
-.share-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-.share-row .full { grid-column: 1 / -1; }
-
-/* カテゴリ別ふりかえり */
-.cat-row { display: flex; align-items: center; gap: 8px; margin: 7px 0; font-size: .86rem; }
-.cat-name { flex: 0 0 7.5em; }
-.cat-bar-wrap { flex: 1; height: 9px; background: var(--line); border-radius: 99px; overflow: hidden; }
-.cat-bar {
-  display: block; height: 9px; border-radius: 99px;
-  background: linear-gradient(90deg, var(--field) 0%, var(--field-back) 100%);
-  transition: width .5s ease;
-}
-.cat-score { flex: 0 0 3em; text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
-.cat-flag { flex: 0 0 auto; font-size: .72rem; font-weight: 700; border-radius: 99px; padding: 1px 8px; }
-.cat-flag.good { background: #fdeedd; color: #b25a17; border: 1px solid var(--star); }
-.cat-flag.grow { background: var(--field-pale); color: var(--field-deep); border: 1px solid var(--field); }
-
-/* ランキング */
-.tabs { display: flex; gap: 6px; margin-bottom: 14px; }
-.tab {
-  flex: 1; padding: 9px 4px; text-align: center; font-weight: 700; font-size: .92rem;
-  border: 2px solid var(--line); border-radius: 99px; background: #fff; color: var(--muted); cursor: pointer;
-  transition: border-color .12s ease, transform .12s ease;
-}
-.tab:hover { border-color: var(--field); transform: translateY(-1px); }
-.tab.active { border-color: var(--field-deep); background: var(--field); color: #fff; }
-table.rank { width: 100%; border-collapse: collapse; font-size: .95rem; }
-table.rank th { font-size: .74rem; color: var(--muted); text-align: left; padding: 6px 8px; border-bottom: 1.5px solid var(--line); }
-table.rank td { padding: 9px 8px; border-bottom: 1px solid var(--line); }
-table.rank tr.me { background: var(--field-pale); }
-.rank-1 td:first-child::before { content: "🥇"; margin-right: 2px; }
-.rank-2 td:first-child::before { content: "🥈"; margin-right: 2px; }
-.rank-3 td:first-child::before { content: "🥉"; margin-right: 2px; }
-
-/* 管理画面 */
-.pending-item { border-top: 1.5px dashed var(--line); padding-top: 12px; margin-top: 12px; }
-.admin-actions { display: flex; gap: 8px; margin-top: 8px; }
-.admin-actions .btn { margin: 0; padding: 10px; font-size: .92rem; }
-.small { font-size: .82rem; color: var(--muted); }
-
-.navrow { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
-.navrow .btn { width: auto; flex: 1; padding: 10px 8px; font-size: .9rem; }
-.hidden { display: none !important; }
-.center { text-align: center; }
