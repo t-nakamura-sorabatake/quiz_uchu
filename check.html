@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>接続診断 | ここも宇宙だよクイズ</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  .diag { font-size: .95rem; }
+  .diag .row { padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  .diag .ok::before { content: "✅ "; }
+  .diag .ng::before { content: "❌ "; }
+  .diag .warn::before { content: "⚠️ "; }
+  .diag code { background: var(--field-pale); padding: 1px 6px; border-radius: 6px; word-break: break-all; }
+</style>
+</head>
+<body>
+<main>
+  <div class="card diag">
+    <p class="eyebrow">接続診断</p>
+    <p class="small">このページは公開前の動作確認用です。問題が解決したら削除して構いません。</p>
+    <div id="out"><p class="small">診断中…</p></div>
+  </div>
+  <div class="navrow"><a class="btn" href="index.html">トップへ</a></div>
+</main>
+
+<script src="js/common.js"></script>
+<script>
+(async () => {
+  const out = document.getElementById("out");
+  const rows = [];
+  const add = (cls, html) => { rows.push(`<div class="row ${cls}">${html}</div>`); out.innerHTML = rows.join(""); };
+
+  // 1. 設定値の確認
+  if (typeof SUPABASE_URL === "undefined") {
+    add("ng", "common.js が読み込めていません。<code>js/common.js</code> がこのHTMLと同じ階層の js フォルダにあるか確認してください。");
+    return;
+  }
+  if (SUPABASE_URL.includes("YOUR-PROJECT")) {
+    add("ng", "SUPABASE_URL が書き換えられていません。common.js の1行目を自分のProject URLにしてください。");
+  } else if (!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(SUPABASE_URL)) {
+    add("warn", `SUPABASE_URL の形式が想定と違います: <code>${SUPABASE_URL}</code><br>正しくは <code>https://xxxx.supabase.co</code> の形です(末尾にパス不要)。`);
+  } else {
+    add("ok", `SUPABASE_URL: <code>${SUPABASE_URL}</code>`);
+  }
+
+  if (SUPABASE_ANON_KEY.includes("YOUR_ANON")) {
+    add("ng", "SUPABASE_ANON_KEY が書き換えられていません。common.js の2行目にanonキーを貼ってください。");
+    return;
+  } else if (SUPABASE_ANON_KEY.startsWith("eyJ") || SUPABASE_ANON_KEY.startsWith("sb_publishable_")) {
+    add("ok", `キーの形式: <code>${SUPABASE_ANON_KEY.slice(0, 18)}...</code>(${SUPABASE_ANON_KEY.startsWith("eyJ") ? "legacy anon" : "publishable"}形式)`);
+  } else if (SUPABASE_ANON_KEY.startsWith("sb_secret_")) {
+    add("ng", "secret キーが貼られています!これは絶対に公開してはいけないキーです。今すぐSupabaseの API Keys 画面でこのキーをローテーションし、<strong>anon public(eyJ...)または publishable(sb_publishable_...)</strong>に貼り替えてください。");
+    return;
+  } else {
+    add("warn", `キーの形式が想定外です: <code>${SUPABASE_ANON_KEY.slice(0, 12)}...</code><br>Settings → API Keys の <strong>anon public</strong>(eyJ で始まる)か <strong>publishable</strong>(sb_publishable_ で始まる)を丸ごとコピーしてください。改行や前後の空白が入っていないかも確認を。`);
+  }
+
+  // 2. 接続とデータの確認
+  try {
+    const { data: quizzes, error } = await sb.from("quizzes").select("id, title").limit(5);
+    if (error) throw error;
+    if (!quizzes || quizzes.length === 0) {
+      add("ng", "接続はできましたが quizzes テーブルが空です。schema.sql を最後まで実行してください(クイズ本体のINSERTが末尾にあります)。");
+      return;
+    }
+    add("ok", `quizzes: ${quizzes.length}件(「${quizzes[0].title}」)`);
+    if (quizzes.length > 1) add("warn", "quizzes が複数行あります。schema.sql を複数回実行した形跡です。動作はしますが、不要な行は Table Editor で削除を推奨。");
+
+    const { count, error: e2 } = await sb.from("questions")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "approved");
+    if (e2) throw e2;
+    if (!count) {
+      add("ng", "questions(承認済み)が0件です。seed_questions_part1.sql → part2.sql を実行してください。");
+      return;
+    }
+    add(count >= 200 ? "ok" : "warn", `承認済みの問題: ${count}件${count < 200 ? "(200件が正常。seedの一部が未実行かも)" : ""}`);
+
+    // 3. 書き込みの確認(answersに1件入れて消せないのでダミーは入れない: RLSのselectのみ確認)
+    const { error: e3 } = await sb.from("ranking_view").select("rank").limit(1);
+    if (e3) throw e3;
+    add("ok", "ランキングビューも読めています。");
+    add("ok", "<strong>診断完了: すべて正常です!</strong> トップからクイズを開始できるはずです。");
+  } catch (err) {
+    add("ng", `Supabaseへの接続でエラーが発生しました:<br><code>${(err.message || err).toString().slice(0, 300)}</code><br>
+      よくある原因:<br>
+      ・キーの貼り間違い(途中で切れている/改行混入)<br>
+      ・schema.sql が最後まで実行されていない(RLSポリシー未作成だと読み取りが拒否されます)<br>
+      ・URLが別プロジェクトのもの`);
+  }
+})();
+</script>
+</body>
+</html>
